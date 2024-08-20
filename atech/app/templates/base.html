@@ -62,6 +62,13 @@
                                     <div class="product-info">
                                         <h3 class="product-name">{{ product.product_name }}</h3>
                                         <h3 class="product-price">${{ product.price|floatformat:2 }}</h3>
+<<<<<<< HEAD
+=======
+                                        <form method="POST" action="{% url 'add_to_cart' product.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit">Добавить в корзину</button>
+                                        </form>                                        
+>>>>>>> 8c4a84435e3f40093a14907c826f0bd9ae76b4d4
                                     </div>
                                 </a>
                             </div>

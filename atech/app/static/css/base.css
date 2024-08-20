@@ -352,7 +352,11 @@ a {
     padding: 8px 16px;
     font-size: 16px;
     color: #fff;
+<<<<<<< HEAD
     background-color: #f84612;
+=======
+    background-color: #f84622;
+>>>>>>> 8c4a84435e3f40093a14907c826f0bd9ae76b4d4
     border: none;
     border-radius: 4px;
     cursor: pointer;
