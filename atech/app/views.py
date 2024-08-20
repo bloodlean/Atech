@@ -134,28 +134,37 @@ def advanced_search_view(request):
 
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    session_key = request.session.session_key
-    if not session_key:
-        request.session.create()
-        session_key = request.session.session_key
 
-    cart_item, created = Cart.objects.get_or_create(session_key=session_key, product=product)
-    
-    if not created:
-        cart_item.quantity += 1
-        cart_item.save()
+    cart = request.session.get('cart', {})
+
+    if str(product_id) in cart:
+        cart[str(product_id)] += 1 
+    else:
+        cart[str(product_id)] = 1
+
+    request.session['cart'] = cart
 
     return redirect('view_cart')
 
 def view_cart(request):
-    session_key = request.session.session_key
-    if not session_key:
-        return render(request, 'view_cart.html', {'cart_items': []})
+    cart = request.session.get('cart', {})
+    products = Product.objects.filter(id__in=cart.keys())
+    cart_items = []
 
-    cart_items = Cart.objects.filter(session_key=session_key)
-    total_price = sum(item.product.price * item.quantity for item in cart_items)
+    for product in products:
+        cart_items.append({
+            'product': product,
+            'quantity': cart[str(product.id)],
+            'total_price': product.price * cart[str(product.id)]
+        })
 
-    return render(request, 'view_cart.html', {'cart_items': cart_items, 'total_price': total_price})
+    context = {
+        'cart_items': cart_items,
+        'total_cart_price': sum(item['total_price'] for item in cart_items)
+    }
+
+    return render(request, 'cart.html', context)
+
 
 def remove_from_cart(request, product_id):
     session_key = request.session.session_key
