@@ -27,6 +27,10 @@
                 <p class="product-color">Цвет: {{ product.color }}</p>
             </div>
         </div>
+        <form method="POST" action="{% url 'add_to_cart' product.id %}">
+            {% csrf_token %}
+            <button type="submit">Добавить в корзину</button>
+        </form>
     </main>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
